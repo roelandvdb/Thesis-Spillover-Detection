@@ -27,6 +27,37 @@ The scripts used to analyse are:
 The FCD-data consists of vehicle trajectories on the network within a certain perimeter at 1 Hz. They are mapmatched to a basemap by Be-Mobile. 
 
 The scripts used are:
- - FCDdata.py: plots and analyses the trajectories + matches them to the correct lane based on the continuation of their path + couples the trajectory to the stop lights that affected it + estimate resulting shockwaves. 
+ - FCD.py: plots and analyses the trajectories + matches them to the correct lane based on the continuation of their path + couples the trajectory to the stop lights that affected it + estimate resulting shockwaves. 
 
-## Analyse simulated data
+## Analysis of simulated data
+The vehicle records, the network layout and the signal changes are produced by the VISSIM-simulation. There are 3 different regimes, resulting in 60 different periods (20/ regime)
+
+The scripts used are:
+ - main_training.py: regulates data delivery process: 
+       - Regulates new incoming data: transform .vhp (vehicle records) into .csv files
+       - Save file per trajectory in correct folder / period (using simulated_data.py)
+       - Runs trajectory_data.py to generate the training data
+       - Trains the model (see next section)
+ - simulation_data.py: has multiple functions:
+       - The vehicle records are saved per vehicle in new csv-files
+       - The traffic signals are loaded
+       - The network is loaded
+       - The vehicle records are analysed: plots of their entire path and parts of their path are made; the vehicle flow and turning fractions are determined per link
+ - Trajectory_data.py: analysis of the vehicle records and decomposing them into variables + creating ground truth:
+       - The definition of the ground truth based on the full set of trajectories
+       - The definition of the variables for every trajectory such as number of stops, travel time on the intersection, shockwave intersection, etc. 
+       - Assignment of the trajectories to the respective cycle
+       - Saving the results to a csv-file per link and lane
+  - data_analysis.py: 
+       - Analyse the trajectory variables:  
+ 
+## HMM
+Finally, the HMM is implemented. Two different models are implemented: a first model solely consists of a multinomial logistic regression model, whereas a second model uses an MLR to generate transition probabilities and calculates a time series using a first-order markov chain. The variable 'downstream state' consists of the state estimation on the downstream links, and thus requires an iterative training mechanism: first the model is trained without this variable for all links, and next the model is trained with the variable for only the researched link. 
+
+The scripts used are:
+ - main_training.py: 
+       - define the saving locations of the models and makes sure the models are run in the correct order
+       ! easiest to skip some steps for quick results: early data collection steps (discussed in earlier section) take some time and intermediate results are saved in data. 
+
+      
+ -  
