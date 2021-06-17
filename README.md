@@ -49,7 +49,7 @@ The scripts used are:
        - Assignment of the trajectories to the respective cycle
        - Saving the results to a csv-file per link and lane
   - data_analysis.py: 
-       - Analyse the trajectory variables:  
+       - Analyse the trajectory variables: density plots, boxplots, correlation, VIF-values, etc. 
  
 ## HMM
 Finally, the HMM is implemented. Two different models are implemented: a first model solely consists of a multinomial logistic regression model, whereas a second model uses an MLR to generate transition probabilities and calculates a time series using a first-order markov chain. The variable 'downstream state' consists of the state estimation on the downstream links, and thus requires an iterative training mechanism: first the model is trained without this variable for all links, and next the model is trained with the variable for only the researched link. 
@@ -58,6 +58,15 @@ The scripts used are:
  - main_training.py: 
        - define the saving locations of the models and makes sure the models are run in the correct order
        ! easiest to skip some steps for quick results: early data collection steps (discussed in earlier section) take some time and intermediate results are saved in data. 
-
-      
- -  
+ - logistic_regression.py:
+ - DownstreamstateLR.py:
+ - logistic_regression_withDownstream.py: 
+ - logistic_regression1PC.py:
+ - DownstreamstateLR1PC.py:
+ - logistic_regression1PC_withDownstream.py: 
+ - HMM.py:
+ - DownstreamstateHMM.py:
+ - HMM_withDownstream.py:
+ - HMM1PC.py:
+ - DownstreamstateHMM1PC.py:
+ - HMM1PC_withDownstream.py:
