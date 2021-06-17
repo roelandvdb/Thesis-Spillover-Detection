@@ -7,3 +7,26 @@ There are two main groups of scripts:
  3. Scripts used to train and predict the model.
 
 ## Real-life data analysis
+### a) Intersection Topology Format:
+The ITF-files present the intersection topology as xml-files. They are read and processed in a more easily readable way for the further processes. Moreover, a visually matching of the link IDs with the IDs given by Be-Mobile in the FCD is also included in this file. 
+
+Scripts:
+ - intersectionLayout.py: read the Intersection Topology Files, such that the layout of the lanes and segments can be used 
+
+Data:
+ - ITF-files: .xml-documents for every intersection
+ - shapefiles of the intersection
+### b) VLOG-data:
+The VLOG-data contains data on the traffic signal cycles and the loop detector measurements. They are accompanied by a configuration file and a file describing the layout of the intersection. 
+
+The scripts used to analyse are:
+ - VLOG.py: get signal cycles & loop detections + transform detections into fundamental parameters speed, flow and density 
+ - FD_regression.py: use the processed data from the LDs to find the best fitting fundamental diagram for every detector
+
+### c) FCD-data:
+The FCD-data consists of vehicle trajectories on the network within a certain perimeter at 1 Hz. They are mapmatched to a basemap by Be-Mobile. 
+
+The scripts used are:
+ - FCDdata.py: plots and analyses the trajectories + matches them to the correct lane based on the continuation of their path + couples the trajectory to the stop lights that affected it + estimate resulting shockwaves. 
+
+## Analyse simulated data
