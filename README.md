@@ -108,3 +108,8 @@ The scripts used are:
 
 ## Remarks
 In general, the current scripts are not very user-friendly. It is therefore advised to read through the files first, as the correct order of running the files is indicated there. Sometimes a piece of code needs to be uncommented in order to run the script separately, since other scripts refer back to those scripts, leading to a long computation time. If it could be solved by saving the intermediate results, it was often done so. These results are saved in the data-map. 
+
+## Required packages:
+- pyvlog: reading VLOG-data
+- plotly & seaborn: nicer plots
+- standard packages: numpy, pandas, csv, random, sklearn, matplotlib, glob, os, geopandas, xml, statistics
