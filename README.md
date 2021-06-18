@@ -43,6 +43,9 @@ The scripts used are:
    - The traffic signals are loaded
    - The network is loaded
    - The vehicle records are analysed: plots of their entire path and parts of their path are made; the vehicle flow and turning fractions are determined per link
+ - ReadTrajectories.py:
+   - Read and store all trajectories travelling on a certain link and lane. 
+   - Create cycle-times for the model: fixed time step of 1 min included, other methods e.g. based on traffic signal cycles were alse programmed but left out of this code for clarity.
  - Trajectory_data.py: analysis of the vehicle records and decomposing them into variables + creating ground truth:
    - The definition of the ground truth based on the full set of trajectories
    - The definition of the variables for every trajectory such as number of stops, travel time on the intersection, shockwave intersection, etc. 
