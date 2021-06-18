@@ -34,77 +34,77 @@ The vehicle records, the network layout and the signal changes are produced by t
 
 The scripts used are:
  - main_training.py: regulates data delivery process: 
-       - Regulates new incoming data: transform .vhp (vehicle records) into .csv files
-       - Save file per trajectory in correct folder / period (using simulated_data.py)
-       - Runs trajectory_data.py to generate the training data
-       - Trains the model (see next section)
+   - Regulates new incoming data: transform .vhp (vehicle records) into .csv files
+   - Save file per trajectory in correct folder / period (using simulated_data.py)
+   - Runs trajectory_data.py to generate the training data
+   - Trains the model (see next section)
  - simulation_data.py: has multiple functions:
-       - The vehicle records are saved per vehicle in new csv-files
-       - The traffic signals are loaded
-       - The network is loaded
-       - The vehicle records are analysed: plots of their entire path and parts of their path are made; the vehicle flow and turning fractions are determined per link
+   - The vehicle records are saved per vehicle in new csv-files
+   - The traffic signals are loaded
+   - The network is loaded
+   - The vehicle records are analysed: plots of their entire path and parts of their path are made; the vehicle flow and turning fractions are determined per link
  - Trajectory_data.py: analysis of the vehicle records and decomposing them into variables + creating ground truth:
-       - The definition of the ground truth based on the full set of trajectories
-       - The definition of the variables for every trajectory such as number of stops, travel time on the intersection, shockwave intersection, etc. 
-       - Assignment of the trajectories to the respective cycle
-       - Saving the results to a csv-file per link and lane
+   - The definition of the ground truth based on the full set of trajectories
+   - The definition of the variables for every trajectory such as number of stops, travel time on the intersection, shockwave intersection, etc. 
+   - Assignment of the trajectories to the respective cycle
+   - Saving the results to a csv-file per link and lane
   - data_analysis.py: 
-       - Analyse the trajectory variables: density plots, boxplots, correlation, VIF-values, etc. 
+   - Analyse the trajectory variables: density plots, boxplots, correlation, VIF-values, etc. 
  
 ## HMM
 Finally, the HMM is implemented. Two different models are implemented: a first model solely consists of a multinomial logistic regression model, whereas a second model uses an MLR to generate transition probabilities and calculates a time series using a first-order markov chain. The variable 'downstream state' consists of the state estimation on the downstream links, and thus requires an iterative training mechanism: first the model is trained without this variable for all links, and next the model is trained with the variable for only the researched link. 
 
 The scripts used are:
  - main_training.py: 
-       - define the saving locations of the models and makes sure the models are run in the correct order
-       ! easiest to skip some steps for quick results: early data collection steps (discussed in earlier section) take some time and intermediate results are saved in data. 
+    - define the saving locations of the models and makes sure the models are run in the correct order
+    ! easiest to skip some steps for quick results: early data collection steps (discussed in earlier section) take some time and intermediate results are saved in data. 
  - logistic_regression.py: 
-       - Train the MLR without downstream variable based on 45 training periods & save results in map 'Models'
-       - Test the MLR without downstream variable for varying penetration rates based on 15 test periods & analyse and plot resulting predictions
+    - Train the MLR without downstream variable based on 45 training periods & save results in map 'Models'
+    - Test the MLR without downstream variable for varying penetration rates based on 15 test periods & analyse and plot resulting predictions
  - DownstreamstateLR.py:
-       - Run the models predicted in the MLR without downstream variable for the downstream links, resulting in a combined score for the downstream state
+    - Run the models predicted in the MLR without downstream variable for the downstream links, resulting in a combined score for the downstream state
  - logistic_regression_withDownstream.py: 
-       - Train the MLR with downstream variable based on 45 training periods & save results in map 'Models'
-       - Test the MLR with downstream variable for varying penetration rates based on 15 test periods & analyse and plot resulting predictions        
+    - Train the MLR with downstream variable based on 45 training periods & save results in map 'Models'
+    - Test the MLR with downstream variable for varying penetration rates based on 15 test periods & analyse and plot resulting predictions        
  - logistic_regression1PC.py: only difference with above = random selection of the vehicles
-       - Train the MLR without downstream variable based on 45 training periods & save results in map 'Models'
-       - Test the MLR without downstream variable for 1 vehicle per cycle based on 15 test periods & analyse and plot resulting predictions
+    - Train the MLR without downstream variable based on 45 training periods & save results in map 'Models'
+    - Test the MLR without downstream variable for 1 vehicle per cycle based on 15 test periods & analyse and plot resulting predictions
  - DownstreamstateLR1PC.py:
-       - Run the models predicted in the MLR without downstream variable for 1 vehicle per cycle for the downstream links, resulting in a combined score for the downstream    state
+    - Run the models predicted in the MLR without downstream variable for 1 vehicle per cycle for the downstream links, resulting in a combined score for the downstream    state
  - logistic_regression1PC_withDownstream.py: 
-       - Train the MLR with downstream variable for one vehicle per cycle based on 45 training periods & save results in map 'Models'
-       - Test the MLR with downstream variable for one vehicle per cycle based on 15 test periods & analyse and plot resulting predictions 
+    - Train the MLR with downstream variable for one vehicle per cycle based on 45 training periods & save results in map 'Models'
+    - Test the MLR with downstream variable for one vehicle per cycle based on 15 test periods & analyse and plot resulting predictions 
  - HMM.py:
-       - Train the HMM without downstream variable based on 45 training periods & save results in map 'Models'
-              - done by dividing the dataset based on the state in the previous cycle, and fitting a separate MLR to every subset
-       - Test the HMM without downstream variable for varying penetration rates based on 15 test periods & analyse and plot resulting predictions
-              - Select random number of trajectories, make a time series of observations
-              - Use a Markov model, where every cycle new transition probabilities are determined by the observations in that cycle
+    - Train the HMM without downstream variable based on 45 training periods & save results in map 'Models'
+      - done by dividing the dataset based on the state in the previous cycle, and fitting a separate MLR to every subset
+    - Test the HMM without downstream variable for varying penetration rates based on 15 test periods & analyse and plot resulting predictions
+      - Select random number of trajectories, make a time series of observations
+      - Use a Markov model, where every cycle new transition probabilities are determined by the observations in that cycle
  - DownstreamstateHMM.py:
-       - Run the models predicted in the HMM without downstream variable for the downstream links, resulting in a combined score for the downstream state
+    - Run the models predicted in the HMM without downstream variable for the downstream links, resulting in a combined score for the downstream state
  - HMM_withDownstream.py:
-       - Train the HMM with downstream variable based on 45 training periods & save results in map 'Models'
-              - done by dividing the dataset based on the state in the previous cycle, and fitting a separate MLR to every subset
-       - Test the HMM with downstream variable for varying penetration rates based on 15 test periods & analyse and plot resulting predictions
-              - Select random number of trajectories, make a time series of observations
-              - Use a Markov model, where every cycle new transition probabilities are determined by the observations in that cycle
+    - Train the HMM with downstream variable based on 45 training periods & save results in map 'Models'
+       - done by dividing the dataset based on the state in the previous cycle, and fitting a separate MLR to every subset
+    - Test the HMM with downstream variable for varying penetration rates based on 15 test periods & analyse and plot resulting predictions
+       - Select random number of trajectories, make a time series of observations
+       - Use a Markov model, where every cycle new transition probabilities are determined by the observations in that cycle
  - HMM1PC.py:
-       - Train the HMM without downstream variable based on 45 training periods & save results in map 'Models'
-              - done by dividing the dataset based on the state in the previous cycle, and fitting a separate MLR to every subset
-       - Test the HMM without downstream variable for oen vehicle per cycle based on 15 test periods & analyse and plot resulting predictions
-              - Select random number of trajectories, make a time series of observations
-              - Use a Markov model, where every cycle new transition probabilities are determined by the observations in that cycle
+    - Train the HMM without downstream variable based on 45 training periods & save results in map 'Models'
+       - done by dividing the dataset based on the state in the previous cycle, and fitting a separate MLR to every subset
+    - Test the HMM without downstream variable for oen vehicle per cycle based on 15 test periods & analyse and plot resulting predictions
+       - Select random number of trajectories, make a time series of observations
+       - Use a Markov model, where every cycle new transition probabilities are determined by the observations in that cycle
  - DownstreamstateHMM1PC.py:
-       - Run the models predicted in the HMM without downstream variable for one vehicle per cycle for the downstream links, resulting in a combined score for the downstream state
+    - Run the models predicted in the HMM without downstream variable for one vehicle per cycle for the downstream links, resulting in a combined score for the downstream state
  - HMM1PC_withDownstream.py:
-       - Train the HMM with downstream variable based on 45 training periods & save results in map 'Models'
-              - done by dividing the dataset based on the state in the previous cycle, and fitting a separate MLR to every subset
-       - Test the HMM with downstream variable for one vehicle per cycle based on 15 test periods & analyse and plot resulting predictions
-              - Select random number of trajectories, make a time series of observations
-              - Use a Markov model, where every cycle new transition probabilities are determined by the observations in that cycle
+    - Train the HMM with downstream variable based on 45 training periods & save results in map 'Models'
+       - Done by dividing the dataset based on the state in the previous cycle, and fitting a separate MLR to every subset
+    - Test the HMM with downstream variable for one vehicle per cycle based on 15 test periods & analyse and plot resulting predictions
+       - Select random number of trajectories, make a time series of observations
+       - Use a Markov model, where every cycle new transition probabilities are determined by the observations in that cycle
  - Nullmodel.py: 
-       - Determine ratio of occurrences of the states in the training dataset 
-       - Determine performance metrics based on the ratios
+    - Determine ratio of occurrences of the states in the training dataset 
+    - Determine performance metrics based on the ratios
 
 ## Remarks
 In general, the current scripts are not very user-friendly. It is therefore advised to read through the files first, as the correct order of running the files is indicated there. Sometimes a piece of code needs to be uncommented in order to run the script separately, since other scripts refer back to those scripts, leading to a long computation time. If it could be solved by saving the intermediate results, it was often done so. These results are saved in the data-map. 
