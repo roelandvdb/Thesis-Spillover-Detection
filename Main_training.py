@@ -363,7 +363,7 @@ downstream_file_test = save_folder + '\\downstream_state_test.csv'
 downstream_state(training_folder, test_folder,save_folder,downstream_file_training,downstream_file_test, variables)
 
 # Train full model
-save_folder = 'Data\Models\MLR1PC_wdownstream_AllRegimes2'
+save_folder = 'Data\Models\MLR1PC_wdownstream'
 
 if not os.path.exists(save_folder):
     os.makedirs(save_folder)
