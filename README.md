@@ -52,7 +52,7 @@ The scripts used are:
    - Assignment of the trajectories to the respective cycle
    - Saving the results to a csv-file per link and lane
   - data_analysis.py: 
-   - Analyse the trajectory variables: density plots, boxplots, correlation, VIF-values, etc. 
+    - Analyse the trajectory variables: density plots, boxplots, correlation, VIF-values, etc. 
  
 ## HMM
 Finally, the HMM is implemented. Two different models are implemented: a first model solely consists of a multinomial logistic regression model, whereas a second model uses an MLR to generate transition probabilities and calculates a time series using a first-order markov chain. The variable 'downstream state' consists of the state estimation on the downstream links, and thus requires an iterative training mechanism: first the model is trained without this variable for all links, and next the model is trained with the variable for only the researched link. 
@@ -66,7 +66,7 @@ The scripts used are:
     - Test the MLR without downstream variable for varying penetration rates based on 15 test periods & analyse and plot resulting predictions
  - DownstreamstateLR.py:
     - Run the models predicted in the MLR without downstream variable for the downstream links, resulting in a combined score for the downstream state
- - logistic_regression_withDownstream.py: 
+ - Logistic_regression_wDownstream.py: 
     - Train the MLR with downstream variable based on 45 training periods & save results in map 'Models'
     - Test the MLR with downstream variable for varying penetration rates based on 15 test periods & analyse and plot resulting predictions        
  - logistic_regression1PC.py: only difference with above = random selection of the vehicles
@@ -74,7 +74,7 @@ The scripts used are:
     - Test the MLR without downstream variable for 1 vehicle per cycle based on 15 test periods & analyse and plot resulting predictions
  - DownstreamstateLR1PC.py:
     - Run the models predicted in the MLR without downstream variable for 1 vehicle per cycle for the downstream links, resulting in a combined score for the downstream    state
- - logistic_regression1PC_withDownstream.py: 
+ - logistic_regression1PC_wDownstream.py: 
     - Train the MLR with downstream variable for one vehicle per cycle based on 45 training periods & save results in map 'Models'
     - Test the MLR with downstream variable for one vehicle per cycle based on 15 test periods & analyse and plot resulting predictions 
  - HMM.py:
@@ -99,7 +99,7 @@ The scripts used are:
        - Use a Markov model, where every cycle new transition probabilities are determined by the observations in that cycle
  - DownstreamstateHMM1PC.py:
     - Run the models predicted in the HMM without downstream variable for one vehicle per cycle for the downstream links, resulting in a combined score for the downstream state
- - HMM1PC_withDownstream.py:
+ - HMM1PC_whDownstreamState.py:
     - Train the HMM with downstream variable based on 45 training periods & save results in map 'Models'
        - Done by dividing the dataset based on the state in the previous cycle, and fitting a separate MLR to every subset
     - Test the HMM with downstream variable for one vehicle per cycle based on 15 test periods & analyse and plot resulting predictions
@@ -109,10 +109,34 @@ The scripts used are:
     - Determine ratio of occurrences of the states in the training dataset 
     - Determine performance metrics based on the ratios
 
+
+## The data
+All data, intermediate results and the files of the microsimulation are gathered in the data-map. The map can be accessed through wetransfer, since it was to large to post here. The output of wetransfer should replace the 'Data'-map in this repository. 
+
+It consists of:
+  - FCD: one month of FCD data at a 1 Hz Frequency, delivered by Be-Mobile
+  - VLOG: All data and intermediate results related to the VLOG-data:
+    - VLOG: 4 files containing the VLOG-data for one month. Best read using the Cuteview software (http://interstyles.nl/cuteview/)
+    - Config: configuration files of the different intersections
+    - ITF: The xml-files containing the layout of the intersections
+    - Shapefile_bb: shapefile of the basemap provided by Be-Mobile
+    - OD_flows.csv: outputs of the VLOG.py file, necessary for the FD_regression.py
+  - Simulation: all files coming from the simulation
+    - RawTrajectories: examples of the vehicle records by the simulation (converted to .CSV-file)
+    - TrajectoriesPerVehicle: processed vehicle records in .csv-file per vehicle
+    - Deventer_TL_HighRegime.xlsx: example of the traffic light-file. Output of simulation is converted manually in excel by loading the data and converting it in the correct format. 
+    - network.xlsx: the network-data, such as the links, lanes, link-lenghts, connecting links etc. 
+    - TrainingData: the processed covariates for the 45 training periods 
+    - TestData: the processed covariates for the 15 test periods
+    - Shockwaves: a smaller sample of vehicle trajectories + the resulting experienced shockwave speeds (shockwavespeeds.csv)
+  - Models:
+    - the trained coefficients for the different models
+  - VISSIM: the microsimulation
+
 ## Remarks
-In general, the current scripts are not very user-friendly. It is therefore advised to read through the files first, as the correct order of running the files is indicated there. Sometimes a piece of code needs to be uncommented in order to run the script separately, since other scripts refer back to those scripts, leading to a long computation time. If it could be solved by saving the intermediate results, it was often done so. These results are saved in the data-map. 
+In general, the current scripts are not very user-friendly. In the code some interesting side-results/plotting operations are in comments, such that the code runs faster. Sometimes a piece of code needs to be uncommented in order to run the script separately, since other scripts refer back to those scripts, leading to a long computation time. If it could be solved by saving the intermediate results, it was often done so. These results are saved in the data-map. 
 
 ## Required packages:
-- pyvlog: reading VLOG-data
+- pyvlog: reading VLOG-data (https://github.com/HAL24K/pyvlog)
 - plotly & seaborn: nicer plots
 - standard packages: numpy, pandas, csv, random, sklearn, matplotlib, glob, os, geopandas, xml, statistics
