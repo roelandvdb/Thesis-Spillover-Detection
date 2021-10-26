@@ -6,6 +6,8 @@ There are two main groups of scripts:
  2. Scripts used to analyse the vehicle records from the simulated setting.
  3. Scripts used to train and predict the model.
 
+The final report is also included in the files above as 'Thesis_RoelandVandenberghe.pdf'.
+
 ## Real-life data analysis
 ### a) Intersection Topology Format:
 The ITF-files present the intersection topology as xml-files. They are read and processed in a more easily readable way for the further processes. Moreover, a visually matching of the link IDs with the IDs given by Be-Mobile in the FCD is also included in this file. 
